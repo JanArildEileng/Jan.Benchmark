@@ -1,29 +1,31 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Order;
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("Hello, Benchmark!");
 
 
-MyTestPrimeCalc myTestPrimeCalc=new MyTestPrimeCalc();
 
- Console.WriteLine($"NumberOfPrimesTestSimple antalPrimes={myTestPrimeCalc.NumberOfPrimesTestSimple()}");
- Console.WriteLine($"NumberOfPrimesTestBetter antalPrimes={myTestPrimeCalc.NumberOfPrimesTestBetter()}");
-
- var summary = BenchmarkRunner.Run<MyTestPrimeCalc>();
+ var summary = BenchmarkRunner.Run<TestIsPrime>();
 
 
+var testIsPrime=new TestIsPrime();
 
+ Console.WriteLine($"IsPrimeSimple antalPrimes={testIsPrime.IsPrimeSimple()}");
+ Console.WriteLine($"IsPrimeBetter antalPrimes={testIsPrime.IsPrimeBetter()}");
 
-public class MyTestPrimeCalc {
+  [MemoryDiagnoser]
+  [Orderer(SummaryOrderPolicy.FastestToSlowest)]
+  [RankColumn()]
+public class TestIsPrime {
   
     const long MAX=20;
 
 
 [Benchmark]
-     public long NumberOfPrimesTestSimple() {
-       long antalPrimes=0;
-
+     public long IsPrimeSimple() {
+     
         Func<long,bool> isPrime= (p)=> {
          if ( p <2) return false;
          if ( p==2) return true;
@@ -35,17 +37,13 @@ public class MyTestPrimeCalc {
           return true;
         };
 
-         for(long primeCandidate=2;primeCandidate<=MAX;primeCandidate++) {
-            antalPrimes+=isPrime(primeCandidate)?1:0;
-         } 
-
-         return antalPrimes;
+     
+         return FindNumbersOfPrimes(isPrime);
      }
 
 
     [Benchmark]
-     public long NumberOfPrimesTestBetter() {
-       long antalPrimes=0;
+     public long IsPrimeBetter() {
 
         Func<long,bool> isPrime= (p)=> {
          if ( p <2) return false;
@@ -58,16 +56,16 @@ public class MyTestPrimeCalc {
           return true;
         };
 
-         for(long primeCandidate=2;primeCandidate<=MAX;primeCandidate++) {
-            antalPrimes+=isPrime(primeCandidate)?1:0;
-         } 
-
-         return antalPrimes;
+         return FindNumbersOfPrimes(isPrime);
      }
    
    
-   
+     private long FindNumbersOfPrimes( Func<long,bool> isPrime) {
+        long antalPrimes=0;
+        for(long primeCandidate=2;primeCandidate<=MAX;primeCandidate++) {
+            antalPrimes+=isPrime(primeCandidate)?1:0;
+        } 
 
-
-
+         return antalPrimes;
+     }
 }
