@@ -17,6 +17,9 @@ var testIsPrime=new TestIsPrime();
  Console.WriteLine($"IsPrimeSimple antalPrimes={testIsPrime.IsPrimeSimple()}");
  Console.WriteLine($"IsPrimeBetter antalPrimes={testIsPrime.IsPrimeBetter()}");
 Console.WriteLine($"IsPrimeBest antalPrimes={testIsPrime.IsPrimeBest()}");
+Console.WriteLine($"IsPrimeSveinParallel antalPrimes={testIsPrime.IsPrimeSveinParallel()}");
+
+
 
 
 
